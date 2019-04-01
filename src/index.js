@@ -17,10 +17,10 @@ import {
 
 import drawLinechart from './Modules/multiLine';
 
-render(housingDataCombined);
+renderLinechart(housingDataCombined);
 
 
-function render(data){
+function renderLinechart(data){
 
 	const charts = select('.module')
 		.selectAll('.chart')
@@ -38,3 +38,25 @@ function render(data){
 			);
 		});
 }
+
+function renderHistogramArea(data){
+	d3.select('.module')
+		.each(function(){
+	      	drawHis2(
+	        	this,
+	        	data
+	      	);
+	    });
+}
+
+function renderHistogramPrice(data){
+
+  d3.select('.module')
+    	.each(function(){
+     		drawHis3(
+        		this,
+        		data
+      		);
+    	});
+}
+
