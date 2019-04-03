@@ -1,13 +1,14 @@
 
-function drawHis2(rootdom, data){
+function drawHistogramArea(rootdom, data){
   
+   
   const margin = {top: 10, right: 30, bottom: 30, left: 40};
   const width = 460 - margin.left - margin.right;
   const height = 400 - margin.top - margin.bottom;
 
 
 
-    // X axis: scale and draw:
+  // X axis: scale and draw:
   const x = d3.scaleLinear()
     .domain([0, 400])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
     .range([0, width]);
@@ -20,7 +21,7 @@ function drawHis2(rootdom, data){
 
   // And apply this function to data to get the bins
   const bins = histogram(data);
-
+  console.log(bins)
   // Y axis: scale and draw:
   const y = d3.scaleLinear()
     .range([height, 0]);
@@ -35,37 +36,47 @@ function drawHis2(rootdom, data){
   const svgEnter = svg.enter()
     .append("svg")
 
-  svg.merge(svgEnter)
+  svgEnter
+    .append('g').attr('class','plot')
+  
+  const plot = svg.merge(svgEnter)
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
-     
-  const plotEnter = svgEnter.append("g")
-    .attr("class","plot")
+    .select('.plot')
     .attr("transform",
-            "translate(" + margin.left + "," + margin.top + ")");
+            "translate(" + margin.left + "," + margin.top + ")")
 
-  plotEnter.append("g")
+  const rects = plot.selectAll('.bar')
+    .data(bins); 
+
+  rects.exit().remove();  
+
+// append the bar rectangles to the svg element
+   
+  const rectsEnter = rects.enter()
+    .append('g').attr("class","bar")
+
+  rectsEnter.append("g")
     .attr("class","axis-x")
     .attr("transform", "translate(0," + height + ")")
 
-  plotEnter.append("g")
+  rectsEnter.append("g")
     .attr("class","axis-y")
 
-  plotEnter
-    .append("rect") 
+  
+  rectsEnter.append('rect')
     .attr("class","rect")
-    .style("fill", "#69b3a2")
+    .style("fill", "#ff5a5f")
 
-
-  // append the bar rectangles to the svg element
-  const plot = svg.merge(svgEnter).select(".plot")
- 
-  plot.selectAll(".rect")
+ //Update 
+  plot.selectAll('.rect')
     .data(bins)
+    .transition()
     .attr("x", 1)
     .attr("transform", function(d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; })
     .attr("width", function(d) { return x(d.x1) - x(d.x0) - 1 ; })
     .attr("height", function(d) { return height - y(d.length); })
+  
   plot.select(".axis-x")
     .call(d3.axisBottom(x));
   plot.select(".axis-y")

@@ -1,26 +1,26 @@
-
 function drawHistogramPrice(rootdom, data){
+
   // set the dimensions and margins of the graph
-  const margin = {top: 10, right: 30, bottom: 30, left: 40};
-  const width = 460 - margin.left - margin.right;
-  const height = 400 - margin.top - margin.bottom;
+  var margin = {top: 10, right: 30, bottom: 30, left: 40},
+      width = 460 - margin.left - margin.right,
+      height = 400 - margin.top - margin.bottom;
 
   // X axis: scale and draw:
-  const x = d3.scaleLinear()
-    .domain([10000, 200000])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
+  var x = d3.scaleLinear()
+    .domain([1, 10])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
     .range([0, width]);
-
+ 
   // set the parameters for the histogram
-  const histogram = d3.histogram()
-    .value(function(d) { return d.price; })   // I need to give the vector of value
+  var histogram = d3.histogram()
+    .value(function(d) { return d.room; })   // I need to give the vector of value
     .domain(x.domain())  // then the domain of the graphic
-    .thresholds(x.ticks(70)); // then the numbers of bins
+    .thresholds(x.ticks(10)); // then the numbers of bins
 
   // And apply this function to data to get the bins
-  const bins = histogram(data);
+  var bins = histogram(data);
 
   // Y axis: scale and draw:
-  const y = d3.scaleLinear()
+  var y = d3.scaleLinear()
     .range([height, 0]);
   y.domain([0, d3.max(bins, function(d) { return d.length; })]);   // d3.hist has to be called before the Y axis obviously
   
@@ -78,6 +78,5 @@ function drawHistogramPrice(rootdom, data){
     .call(d3.axisBottom(x));
   plot.select(".axis-y")
     .call(d3.axisLeft(y));
-
 
 }

@@ -8,6 +8,7 @@ import {csv, timeParse, timeFormat, descending} from 'd3';
 
 const dataPromise2017 = csv("./data/2017.csv", parseData);
 const districtPromise = csv("./data/district.csv", parseDistrictData)
+//	.then(data => new Map(data));
 const dataPromise = csv("./data/new.csv", parseData);
 const incomePromise = csv("./data/income.csv", parseIncomeData)
 
