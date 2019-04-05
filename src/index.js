@@ -18,6 +18,7 @@ import {
 import drawLinechart from './Modules/multiLine';
 import drawHistogramArea from './Modules/histogramArea'
 import drawHistogramPrice from './Modules/histogramPrice'
+import drawHistogramRoom from './Modules/histogramPrice'
 import drawHistogramTradetime from './Modules/histogramTradetime'
 import drawMap from './Modules/map2017'
 
@@ -33,17 +34,23 @@ globalDispatch.on('change:district',(code, displayName) => {
 	//Update title
 
 	//Update other view modules
-	console.log(housingDataCombined);
-	housingDataCombined.then(data => {
+	//console.log(housingDataCombined);
+	dataPromise2017.then(data => {
 		const filterData = data.filter(d => d.district === originCode);
-		renderLinechart(housingDataCombined);
 		renderMap2017(filterData);
 		renderHistogramArea(filterData);
 		renderHistogramPrice(filterData);
+		renderHistogramRoom(filterData);
+		renderHistogramTradetime(filterData);
 
+	})
+
+	housingDataCombined.then(data => {
+		renderLinechart(data)
 	})
 })
 
+	
 globalDispatch.on('change:year', year => {
 	currentYear = +year;
 
@@ -52,19 +59,19 @@ globalDispatch.on('change:year', year => {
 })
 
 //Data import
-// dataPromise2017.then(() => 
-// 	globalDispatch.call(
-// 		'change:country',
-// 		null,
-// 		"01",
-// 		"Dongcheng District"
-// 	));
+dataPromise2017.then(() => 
+	globalDispatch.call(
+		'change:district',
+		null,
+		"01",
+		"Dongcheng District"
+	));
 districtPromise.then(code => renderMenu(code));
 
 
 function renderLinechart(data){
 
-	const charts = select('.module')
+	const charts = select('.ViewLinechart')
 		.selectAll('.chart')
 		.data(data, d => d.key);
 	const chartsEnter = charts.enter()
@@ -82,9 +89,9 @@ function renderLinechart(data){
 }
 
 function renderHistogramArea(data){
-	d3.select('.module')
+	select('.area')
 		.each(function(){
-	      	drawHis2(
+	      	drawHistogramArea(
 	        	this,
 	        	data
 	      	);
@@ -93,9 +100,9 @@ function renderHistogramArea(data){
 
 function renderHistogramPrice(data){
 
-    d3.select('.module')
+    select('.price')
     	.each(function(){
-     		drawHis3(
+     		drawHistogramPrice(
         		this,
         		data
       		);
@@ -103,7 +110,7 @@ function renderHistogramPrice(data){
 }
 
 function renderMap2017(data) {
-	d3.select('.module')
+	select('.map')
 		.each(function(){
 			drawMap(
 				this,
@@ -112,11 +119,32 @@ function renderMap2017(data) {
 		});
 }
 
+function renderHistogramTradetime(data){
+
+    select('.time')
+    	.each(function(){
+     		drawHistogramTradetime(
+        		this,
+        		data
+      		);
+    	});
+}
+
+function renderHistogramRoom(data){
+
+    select('.room')
+    	.each(function(){
+     		drawHistogramRoom(
+        		this,
+        		data
+      		);
+    	});
+}
 
 function renderMenu(code){
 	//Get list of countryCode values
 	const districtList = Array.from(code.entries());
-	
+	console.log(districtList)
 	//Build UI for <select> menu
 	let menu = select('.nav')
 		.selectAll('select')
@@ -130,8 +158,8 @@ function renderMenu(code){
 		.data(districtList)
 		.enter()
 		.append('option')
-		.attr('value', d => d[1])
-		.html(d => d[0]);
+		.attr('value', d => d[1].code)
+		.html(d => d[1].name);
 
 	//Define behavior for <select> menu
 	menu.on('change', function(){
@@ -139,6 +167,6 @@ function renderMenu(code){
 		const idx = this.selectedIndex;
 		const display = this.options[idx].innerHTML;
 
-		globalDispatch.call('change:country',null,code,display);
+		globalDispatch.call('change:district',null,code,display);
 	});
 }

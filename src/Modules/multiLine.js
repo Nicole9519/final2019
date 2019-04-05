@@ -3,8 +3,10 @@ import * as d3 from 'd3';
 	
 function drawLinechart(rootDOM, data){
 
-	const W = rootDOM.clientWidth;
-	const H = rootDOM.clientHeight;
+	const W = 300;
+	const H = 300;
+	//const W = rootDOM.clientWidth;
+	//const H = rootDOM.clientHeight;
 	const margin = {t:32, r:32, b:64, l:64};
 	const innerWidth = W - margin.l - margin.r;
 	const innerHeight = H - margin.t - margin.b;

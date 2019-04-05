@@ -4,7 +4,7 @@ import{
 	parseIncomeData
 } from './utils';
 
-import {csv, timeParse, timeFormat, descending} from 'd3';
+import {csv, timeParse, timeFormat, descending, nest, mean} from 'd3';
 
 const dataPromise2017 = csv("./data/2017.csv", parseData);
 const districtPromise = csv("./data/district.csv", parseDistrictData)
@@ -54,7 +54,7 @@ const housingDataCombined = Promise.all([
 		const housing_ave = nest()
 			.key(d => d.district)
 			.key(d => formatTime(parseDate(d.time)))
-			.rollup(values => d3.mean(values, d => d.price))
+			.rollup(values => mean(values, d => d.price))
 			.entries(housing)
 		
 		/*用map合并数据*/
@@ -83,7 +83,7 @@ const housingDataCombined = Promise.all([
 				d.values[i].income = +d.values[i].income[0].income;
 			}
 
-			d.values =d.values.sort(function(x, y){
+			d.values = d.values.sort(function(x, y){
 					return descending(x.key, y.key);
 			})
 

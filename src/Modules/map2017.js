@@ -1,8 +1,9 @@
+import * as d3 from 'd3';
 
 function drawMap(rootDOM,data){
 
-	const W = rootDOM.clientWidth;
-	const H = rootDOM.clientHeight;
+	const W = 500;
+	const H = 300;
 	const m = {t:32,r:32,b:32,l:32};
 
 	const colorScale = d3.scaleLinear()
@@ -87,3 +88,7 @@ function drawMap(rootDOM,data){
 
 	nodes.exit().remove()
 }
+
+
+export default drawMap;
+

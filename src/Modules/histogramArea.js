@@ -1,3 +1,4 @@
+import * as d3 from 'd3';
 
 function drawHistogramArea(rootdom, data){
   
@@ -21,7 +22,7 @@ function drawHistogramArea(rootdom, data){
 
   // And apply this function to data to get the bins
   const bins = histogram(data);
-  console.log(bins)
+  //console.log(bins)
   // Y axis: scale and draw:
   const y = d3.scaleLinear()
     .range([height, 0]);
@@ -85,3 +86,6 @@ function drawHistogramArea(rootdom, data){
 
 
 }
+
+
+export default drawHistogramArea;

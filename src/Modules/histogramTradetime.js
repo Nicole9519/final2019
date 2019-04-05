@@ -1,3 +1,4 @@
+import * as d3 from 'd3';
 
 function drawHistogramTradetime(rootdom,data){
   const margin = {top: 10, right: 30, bottom: 30, left: 40},
@@ -8,7 +9,7 @@ function drawHistogramTradetime(rootdom,data){
   const parseDate = d3.timeParse("%m/%d/%y")
 
   const formatTime = d3.timeFormat("%m");
-  console.log(data)
+  //console.log(data)
   // X axis: scale and draw:
   const x = d3.scaleLinear()
     .domain([1,13])
@@ -24,7 +25,7 @@ function drawHistogramTradetime(rootdom,data){
 
   // And apply this function to data to get the bins
   const bins = histogram(data);
-  console.log(bins)
+  //console.log(bins)
   // Y axis: scale and draw:
   const y = d3.scaleLinear()
     .range([height, 0]);
@@ -87,3 +88,5 @@ function drawHistogramTradetime(rootdom,data){
 
 
 }
+
+export default drawHistogramTradetime;

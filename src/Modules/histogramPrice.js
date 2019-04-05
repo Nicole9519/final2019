@@ -1,3 +1,4 @@
+import * as d3 from 'd3';
 
 function drawHistogramPrice(rootdom, data){
   // set the dimensions and margins of the graph
@@ -81,3 +82,9 @@ function drawHistogramPrice(rootdom, data){
 
 
 }
+
+
+
+export default drawHistogramPrice;
+
+
