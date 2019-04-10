@@ -2,6 +2,7 @@ console.log('index.js!');
 
 import {select, max, dispatch} from 'd3';
 import './style.css';
+import 'bootstrap/dist/css/bootstrap.css';
 
 import {
 	dataPromise2017,
@@ -15,12 +16,13 @@ import {
 	groupByDistrict
 } from './utils';
 
-import drawLinechart from './Modules/multiLine';
+import LineChart from './Modules/multiLine';
 import drawHistogramArea from './Modules/histogramArea'
 import drawHistogramPrice from './Modules/histogramPrice'
-import drawHistogramRoom from './Modules/histogramPrice'
+import drawHistogramRoom from './Modules/histogramRoom'
 import drawHistogramTradetime from './Modules/histogramTradetime'
 import drawMap from './Modules/map2017'
+import drawOpening from './Modules/opening'
 
 let originCode = "01";
 let currentYear = 2017;
@@ -48,6 +50,10 @@ globalDispatch.on('change:district',(code, displayName) => {
 	housingDataCombined.then(data => {
 		renderLinechart(data)
 	})
+
+	// dataPromise.then(data => {
+	// 	renderOpening(groupByYear(data))
+	// })
 })
 
 	
@@ -55,8 +61,11 @@ globalDispatch.on('change:year', year => {
 	currentYear = +year;
 
 	//update other view modules
-	renderLinechart(housingDataCombined);
+	housingDataCombined.then(data => {
+		renderLinechart(data);
+	})
 })
+	
 
 //Data import
 dataPromise2017.then(() => 
@@ -71,6 +80,11 @@ districtPromise.then(code => renderMenu(code));
 
 function renderLinechart(data){
 
+	const lineChart = LineChart()
+		.onChangeYear(
+			year => globalDispatch.call('change:year',null, year) //function, "callback function" to be executed upon the event
+		);
+	console.log(data)
 	const charts = select('.ViewLinechart')
 		.selectAll('.chart')
 		.data(data, d => d.key);
@@ -81,9 +95,10 @@ function renderLinechart(data){
 
 	charts.merge(chartsEnter)
 		.each(function(d){
-			drawLinechart(
+			lineChart(
 				this,
-				d.values
+				d.values,
+				d.name
 			);
 		});
 }
@@ -141,10 +156,33 @@ function renderHistogramRoom(data){
     	});
 }
 
+
+function renderOpening(data){
+
+
+	const charts = select('.opening')
+		.selectAll(".chart")
+		.data(data, d => d.key)
+
+	const chartsEnter = charts.enter()
+		.append("div")
+		.attr("class","chart")
+
+	charts.exit().remove();
+
+	charts.merge(chartsEnter)
+		.each(function(d){
+			drawMap(
+				this,
+				d.values);
+		});
+
+
+}
 function renderMenu(code){
 	//Get list of countryCode values
 	const districtList = Array.from(code.entries());
-	console.log(districtList)
+	//console.log(districtList)
 	//Build UI for <select> menu
 	let menu = select('.nav')
 		.selectAll('select')

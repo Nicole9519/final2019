@@ -23,6 +23,7 @@ const incomePromise = csv("./data/income.csv", parseIncomeData)
 
 // });
 
+
 //housing combined with income 
 const housingDataCombined = Promise.all([
 	dataPromise,

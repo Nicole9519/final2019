@@ -3,8 +3,8 @@ import * as d3 from 'd3';
 function drawHistogramPrice(rootdom, data){
   // set the dimensions and margins of the graph
   const margin = {top: 10, right: 30, bottom: 30, left: 40};
-  const width = 460 - margin.left - margin.right;
-  const height = 400 - margin.top - margin.bottom;
+  const width = 200 - margin.left - margin.right;
+  const height = 200 - margin.top - margin.bottom;
 
   // X axis: scale and draw:
   const x = d3.scaleLinear()
@@ -25,6 +25,11 @@ function drawHistogramPrice(rootdom, data){
     .range([height, 0]);
   y.domain([0, d3.max(bins, function(d) { return d.length; })]);   // d3.hist has to be called before the Y axis obviously
   
+  const xAxis = d3.axisBottom(x).ticks(6);
+  const yAxis = d3.axisLeft(y)
+    .ticks(6)
+    .tickSize(-innerWidth);
+
   // append the svg object to the body of the page
   const svg = d3.select(rootdom)
     .classed("histogram",true)
@@ -55,16 +60,19 @@ function drawHistogramPrice(rootdom, data){
     .append('g').attr("class","bar")
 
   rectsEnter.append("g")
-    .attr("class","axis-x")
+    .attr("class","axis axis-x")
     .attr("transform", "translate(0," + height + ")")
 
   rectsEnter.append("g")
-    .attr("class","axis-y")
+    .attr("class","axis axis-y")
 
   
   rectsEnter.append('rect')
     .attr("class","rect")
     .style("fill", "#ff5a5f")
+
+  rectsEnter.append('text')
+    .style("text-anchor", "middle")
 
  //Update 
   plot.selectAll('.rect')
@@ -76,10 +84,14 @@ function drawHistogramPrice(rootdom, data){
     .attr("height", function(d) { return height - y(d.length); })
   
   plot.select(".axis-x")
-    .call(d3.axisBottom(x));
+    .call(xAxis);
   plot.select(".axis-y")
-    .call(d3.axisLeft(y));
-
+    .call(yAxis);
+  plot.append("text") 
+    .attr("transform",
+          "translate(" + width/2 + " ," + (height)  + ")")
+    .attr("dy","0em")            
+    .text("Price");
 
 }
 
