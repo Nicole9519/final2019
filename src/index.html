@@ -7,50 +7,89 @@
 	<body>
 		<div class='main'>
 			<div class = 'opening'>
-				<img src = "./data/open.img"></img>
+				<img src = "./data/open2.png"></img>
 			</div>
 			<div class = "container">
 				<div class="row">
-   					<div class="three columns">
-						<p class="byline">By Hanyang Dong</p>
+   					<div class="two columns">
+						<!--<p class="byline">By Hanyang Dong</p>-->
 					</div>
 					<div class="eight  columns">
 						<br/><br/>
 						<p>The housing burden is real for China’s young people.</p> 
-						<p>Looking at all the property transactions from Lianjia.com in Beijing in 2017, we are able to explore the character of Beijing property market and know how affordable it is to live there.</p>
+						<p>Looking at all the property transactions from <a href = "https://bj.lianjia.com/">Lianjia.com</a> in Beijing in 2017, we are able to explore the character of Beijing property market and know how affordable it is to live there.</p>
 						<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
 
-						Why do we use it?
-						It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>
+						</p>
 					</div>
 				</div>
 			</div>
 			<div class='module'>
-				<div class = "nav"></div>
-				<div class="grid-container">
-					<div class = "area histogram grid-item"></div>
-					<div class = "price histogram grid-item"></div>
-					<div class = "time histogram grid-item"></div>
-					<div class = "room histogram grid-item"></div>
+				<br/>
+				 <div class="form-group form-inline">
+					<h3>What was the characteristic of the Real Estate Market in 
+					<div class = "nav"></div>
+					in 2017?</h3>
 				</div>
-				<div class= "map"></div>
-				<p>According to the data from Lianjia.com, Xichend District is the most expensive area in Beijing in 2017, the price reaches to ￥106946.91 per square meter, increased 26.1% to 2017.</p>
-				<p>The average area per unit is just the opposite to the price. In area like Xicheng and Dongcheng District, which located in the center of Beijing, the average area is much smaller than the remote area.</p>
-				<p>There's obvious month preference for people to do the transaction. In Feburary and March, there's usually more transaction than other months, no matter in which district. The spring comes, time to buy a new house?</p>  
+				<div class = "container">
+					<div class="row">
+						<div class="six columns">
+							<div class="grid-container">
+								<div class = "area histogram grid-item"></div>
+								<div class = "price histogram grid-item"></div>
+								<div class = "time histogram grid-item"></div>
+								<div class = "room histogram grid-item"></div>
+							</div>
+						</div>
+						<div class="six columns">
+							<div class= "map"></div>
+						</div>
+					</div>
+				</div>
+				<div class = "container">
+					<div class="row">
+						<div class = "two columns"></div>
+						<div class="eight columns">
+							<br/>
+							<p>According to the data from <a href = "https://bj.lianjia.com/">Lianjia.com</a>, Xicheng District is the most expensive area in Beijing in 2017, the price reaches to ￥106946.91 per square meter, increased 26.1% to 2017.</p>
+							<p>The average area per unit is just the opposite to the price. In area like Xicheng and Dongcheng District, which located in the center of Beijing, the average area is much smaller than the remote area.</p>
+							<p>There's obvious month preference for people to do the transaction. In Feburary and March, there's usually more transaction than other months, no matter in which district. The spring comes, time to buy a new house?</p>  
+							<p>--About two generations after the country began its reform push, property now accounts for 66 percent of household wealth on average, according to a study by Southwestern University of Finance and Economics in Chengdu.</p>
+						</div>
+					</div>
+				</div>
+				<div class = "container">
+					<div class="row">
+						<div class = "two columns"></div>
+						<div class="eight columns">
+							<h3>What is the housing price - income ratio in Beijing?</h3>
+							<br/><p>When talking about housing market, housing affordability really measures. The price to income ratio is the basic affordability measure for housing in a given area. It is generally the ratio of median house prices to median familial disposable incomes, expressed as a percentage or as years of income. According to <a href = "https://www.citylab.com/equity/2018/05/where-the-house-price-to-income-ratio-is-most-out-of-whack/561404/">Citylab</a>, in Boston, for example, the ratio is 5.2, which means median home in Boston cost 2.6 times as much as the median annual income.</p>	
+						</div>
+						<div class = "ViewLinechart"></div>
+					</div>
+				</div>
+				<br/><h3>Personalize your purchase</h3>
+				<div class = "ViewSquare">
+					<div class = "container">
+						<div class="row">
+							<div class = "six columns">
+								<br/><br/><p>
+									<label for="nValue" 
+									style="width: 240px; text-align: left">
+									How big of a home you can buy for <span id="nValue-value"></span>
+									</label>
+									<input type="number" min="1" max="100000" step="1" value="1" id="nValue">
+									billions RMB
+								</p>
+								<div class = "nav2"></div>
+							</div>
+							<div class = "six columns">
+								<div class = "square"></div>
+							</div>
+						</div>
+					</div>				
+				</div>
 			</div>
-			<p>--About two generations after the country began its reform push, property now accounts for 66 percent of household wealth on average, according to a study by Southwestern University of Finance and Economics in Chengdu.</p>
-			<div class = "ViewLinechart"></div>
-			<!-- <div class = "ViewSquare">
-				<p>
-					<label for="nValue" 
-					style="width: 240px; text-align: left">
-					How Much Home You Can Buy for <span id="nValue-value"></span>
-					</label>
-					<input type="number" min="0" max="100000" step="1" value="0" id="nValue">
-					billions RMB
-				</p>
-			</div> -->
-		</div>
 		<script src='bundle.js' type='text/javascript'></script>
 	</body>
 </html>

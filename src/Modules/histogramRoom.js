@@ -28,6 +28,7 @@ function drawHistogramRoom(rootdom, data){
   
   const xAxis = d3.axisBottom(x)
   const yAxis = d3.axisLeft(y)
+    .ticks(6)
     .tickSize(-innerWidth);
 
    // .ticks()
@@ -79,6 +80,7 @@ function drawHistogramRoom(rootdom, data){
   plot.selectAll('.rect')
     .data(bins)
     .transition()
+    .duration(500)
     .attr("x", 1)
     .attr("transform", function(d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; })
     .attr("width", function(d) { return x(d.x1) - x(d.x0) - 1 ; })
@@ -90,9 +92,10 @@ function drawHistogramRoom(rootdom, data){
     .call(yAxis);
   plot.append("text") 
     .attr("transform",
-          "translate(" + width/2 + " ," + (height)  + ")")
+          "translate(" + 4*width/5 + " ," + (height/7)  + ")")
     .attr("dy","0em")            
-    .text("Room Number");
+    .text("Room Number")
+    .style("font-size",20);
 
 }
 

@@ -67,7 +67,7 @@ function drawHistogramTradetime(rootdom,data){
 
   rectsEnter.append("g")
     .attr("class","axis axis-x")
-    .attr("transform", "translate(10," + height + ")")
+    .attr("transform", "translate(5," + height + ")")
 
   rectsEnter.append("g")
     .attr("class","axis axis-y")
@@ -84,6 +84,7 @@ function drawHistogramTradetime(rootdom,data){
   plot.selectAll('.rect')
     .data(bins)
     .transition()
+    .duration(500)
     .attr("x", 1)
     .attr("transform", function(d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; })
     .attr("width", function(d) { return x(d.x1) - x(d.x0) - 1 ; })
@@ -96,9 +97,10 @@ function drawHistogramTradetime(rootdom,data){
 
   plot.append("text") 
     .attr("transform",
-          "translate(" + width/2 + " ," + (height)  + ")")
+          "translate(" + 4*width/5 + " ," + (height/7)  + ")")
     .attr("dy","0em")            
-    .text("Month");
+    .text("Month")
+    .style("font-size",20);
 
 
 }

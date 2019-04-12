@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 
-function drawMap(rootDOM,data){
+function drawMap(rootDOM,data,geo){
 
 	const W = 500;
 	const H = 500;
@@ -20,20 +20,43 @@ function drawMap(rootDOM,data){
 		.translate([W/2, H/2])
 		.scale(40000);
 
-	// const path = d3.geoPath()
- //  		.projection(projection)
+	const path = d3.geoPath()
+  		.projection(projection)
 
 	const svg = d3.select(rootDOM)
 		.classed("map", true)
 		.selectAll("svg")
 		.data([1])
 
+	// svg.selectAll('path')
+ //      	.data(json)
+ //    	.enter().append('path')
+ //      	.attr('d', path)
+ //      	.attr('vector-effect', 'non-scaling-stroke')
+      
+	
 	const svgEnter = svg.enter().append("svg");
 
 	svg.merge(svgEnter)
 		.attr("width", W)
 		.attr("height", H);
-		
+
+	const plotEnter = svgEnter.append("g")
+		.attr("class","plot")
+		.attr('transform', `translate(0,700)`);
+
+	plotEnter.append('path')
+		.attr("class","geo")
+		.style("fill","none")
+		.style("stroke","#333")
+		.style("stroke-width","2px");
+
+	const plot = svg.merge(svgEnter).select(".plot");
+	
+	plot.select('.geo')
+		.data(geo.features)
+		.attr("d", path);
+
 
 	const nodes = svg.merge(svgEnter).selectAll(".node")
 		.data(data);
@@ -44,6 +67,7 @@ function drawMap(rootDOM,data){
 		.attr("class","node");
 
 	nodesEnter.append("circle");
+	
 
 	nodes.merge(nodesEnter)
 		.select("circle")
@@ -85,6 +109,8 @@ function drawMap(rootDOM,data){
 		// 		      .attr("class", "points")
 		// 		      .attr("opacity",0.75);
 		// });
+
+	
 
 	nodes.exit().remove()
 }

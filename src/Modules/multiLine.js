@@ -2,7 +2,7 @@ import * as d3 from 'd3';
 
 function LineChart(){
 
-	const bisect = d3.bisector(d => d.key).right;
+	const bisect = d3.bisector(function(d){ return d.key; }).left;
 	let yearChangeCallback;
 
 	function drawLinechart(rootDOM, data, key){
@@ -83,8 +83,9 @@ function LineChart(){
 		
 		plotEnter.append('text')
 			.attr("class", "title")
-			.attr("transform","translate(0,"+ 3*H/4 +")")
-			//.style("stroke-opacity",0.2)
+			.attr("transform","translate(20,"+ 3*H/4 +")")
+			.style("font-size",12)
+
 		
 
 		//Update the update + enter selections
@@ -121,9 +122,13 @@ function LineChart(){
 				const mouseX = mouse[0];
 				const year = scaleX.invert(mouseX);
 				console.log(year);
-				const idx = bisect(data, year);
-				const datum = data[idx];
-				console.log(datum)
+				const idx = bisect(data, year, 1);
+				console.log(idx)
+				const d0 = data[idx-1];
+				const d1 = data[idx];
+				console.log(d0)
+				console.log(d1)
+				const datum = year - d0.key > d1.key - year ? d1:d0;
 				console.log(idx)
 				plot.select('.tool-tip')
 					.attr('transform', `translate(${scaleX(datum.key)}, ${scaleY(datum.value*31.6/datum.income/2.45)})`)

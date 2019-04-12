@@ -1,6 +1,6 @@
 console.log('index.js!');
 
-import {select, max, dispatch} from 'd3';
+import {select, max, dispatch, min} from 'd3';
 import './style.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
@@ -9,7 +9,8 @@ import {
 	districtPromise,
 	incomePromise,
 	dataPromise,
-	housingDataCombined
+	housingDataCombined,
+	beijingmap
 } from './data';
 import {
 	groupByYear,
@@ -19,10 +20,11 @@ import {
 import LineChart from './Modules/multiLine';
 import drawHistogramArea from './Modules/histogramArea'
 import drawHistogramPrice from './Modules/histogramPrice'
-import drawHistogramRoom from './Modules/histogramRoom'
-import drawHistogramTradetime from './Modules/histogramTradetime'
-import drawMap from './Modules/map2017'
-import drawOpening from './Modules/opening'
+import drawHistogramRoom from './Modules/histogramRoom';
+import drawHistogramTradetime from './Modules/histogramTradetime';
+import drawMap from './Modules/map2017';
+import drawOpening from './Modules/opening';
+import drawSquare from './Modules/square';
 
 let originCode = "01";
 let currentYear = 2017;
@@ -37,18 +39,20 @@ globalDispatch.on('change:district',(code, displayName) => {
 
 	//Update other view modules
 	//console.log(housingDataCombined);
-	dataPromise2017.then(data => {
-		const filterData = data.filter(d => d.district === originCode);
-		renderMap2017(filterData);
-		renderHistogramArea(filterData);
-		renderHistogramPrice(filterData);
-		renderHistogramRoom(filterData);
-		renderHistogramTradetime(filterData);
+	Promise.all([dataPromise2017,beijingmap])
+		.then(([data,geo]) => {
+			const filterData = data.filter(d => d.district === originCode);
+			renderMap2017(filterData,geo);
+			renderHistogramArea(filterData);
+			renderHistogramPrice(filterData);
+			renderHistogramRoom(filterData);
+			renderHistogramTradetime(filterData);
 
-	})
+		})
 
 	housingDataCombined.then(data => {
 		renderLinechart(data)
+		renderSquare(data)
 	})
 
 	// dataPromise.then(data => {
@@ -77,13 +81,22 @@ dataPromise2017.then(() =>
 	));
 districtPromise.then(code => renderMenu(code));
 
+housingDataCombined.then(data => {
+
+	const data01 = data.filter(d => d.key === "01");
+    const min_price = min(data, d => d.values[0].value)
+    const housing01 = data01.map(a=> a.values[0].value);
+      
+    drawSquare(+document.getElementById("nValue").value, housing01, min_price);
+
+})
 
 function renderLinechart(data){
 
 	const lineChart = LineChart()
-		.onChangeYear(
-			year => globalDispatch.call('change:year',null, year) //function, "callback function" to be executed upon the event
-		);
+		// .onChangeYear(
+		// 	year => globalDispatch.call('change:year',null, year) //function, "callback function" to be executed upon the event
+		// );
 	console.log(data)
 	const charts = select('.ViewLinechart')
 		.selectAll('.chart')
@@ -124,12 +137,13 @@ function renderHistogramPrice(data){
     	});
 }
 
-function renderMap2017(data) {
+function renderMap2017(data, geo) {
 	select('.map')
 		.each(function(){
 			drawMap(
 				this,
-				data
+				data,
+				geo
 			);
 		});
 }
@@ -179,6 +193,7 @@ function renderOpening(data){
 
 
 }
+
 function renderMenu(code){
 	//Get list of countryCode values
 	const districtList = Array.from(code.entries());
@@ -207,4 +222,44 @@ function renderMenu(code){
 
 		globalDispatch.call('change:district',null,code,display);
 	});
+}
+
+function renderSquare(data){
+
+    let menu = select(".nav2")
+      	.selectAll("select")
+      	.data([1]);
+
+    menu = menu.enter()
+    	.append('select')
+      	.attr('class','form-control form-control-sm')
+      	.merge(menu);
+
+    menu.selectAll("option")
+      .data(data)
+      .enter()
+      .append("option")
+      .attr("value", d => d.key)
+      .html(d=> d.name);
+
+    menu.on("change", function(){
+
+      const code = this.value;
+
+      const data_code = data.filter(d => d.key === code);
+      
+      const housing = data_code.map(a=> a.values[0].value);
+      
+      const min_price = min(data, d => d.values[0].value)
+
+      //console.log(min)
+      select("#nValue").on("input", function() {
+       drawSquare(+this.value, housing, min_price);
+      });
+
+      drawSquare(+document.getElementById("nValue").value, housing, min_price);
+       
+    })
+//console.log(housingAugmented.map(a => a.values[0].value))
+
 }

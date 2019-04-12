@@ -83,6 +83,7 @@ function drawHistogramArea(rootdom, data){
   plot.selectAll('.rect')
     .data(bins)
     .transition()
+    .duration(500)
     .attr("x", 1)
     .attr("transform", function(d) { return "translate(" + x(d.x0) + "," + y(d.length) + ")"; })
     .attr("width", function(d) { return x(d.x1) - x(d.x0) - 1 ; })
@@ -94,9 +95,10 @@ function drawHistogramArea(rootdom, data){
     .call(yAxis);
   plot.append("text") 
     .attr("transform",
-          "translate(" + width/2 + " ," + (height)  + ")")
+          "translate(" + 4*width/5 + " ," + (height/7)  + ")")
     .attr("dy","0em")            
-    .text("Area");
+    .text("Area")
+    .style("font-size",20);
 
 
 }

@@ -4,13 +4,14 @@ import{
 	parseIncomeData
 } from './utils';
 
-import {csv, timeParse, timeFormat, descending, nest, mean} from 'd3';
+import {csv, timeParse, timeFormat, descending, ascending, nest, mean,json} from 'd3';
 
 const dataPromise2017 = csv("./data/2017.csv", parseData);
 const districtPromise = csv("./data/district.csv", parseDistrictData)
 //	.then(data => new Map(data));
 const dataPromise = csv("./data/new.csv", parseData);
 const incomePromise = csv("./data/income.csv", parseIncomeData)
+const beijingmap = json('./data/beijing.geojson')
 
 // const districtPromise = csv("district.csv",parseDistrict).then(district => {
 // 	const district_tem = district.map(a =>{
@@ -53,7 +54,7 @@ const housingDataCombined = Promise.all([
 		//console.log(incomeMap);
 		//console.log(districtMap)
 		const housing_ave = nest()
-			.key(d => d.district)
+			.key(d => d.district).sortKeys(ascending)
 			.key(d => formatTime(parseDate(d.time)))
 			.rollup(values => mean(values, d => d.price))
 			.entries(housing)
@@ -85,7 +86,7 @@ const housingDataCombined = Promise.all([
 			}
 
 			d.values = d.values.sort(function(x, y){
-					return descending(x.key, y.key);
+				return descending(x.key, y.key);
 			})
 
 
@@ -94,6 +95,7 @@ const housingDataCombined = Promise.all([
 		});
 
 		return housingAugmented
+		console.log(data)
 
 
 	})
@@ -103,5 +105,6 @@ export{
 	districtPromise,
 	incomePromise,
 	dataPromise,
-	housingDataCombined
+	housingDataCombined,
+	beijingmap
 }
