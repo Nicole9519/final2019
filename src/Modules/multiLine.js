@@ -109,6 +109,9 @@ function LineChart(){
 			.data(data)
 			.text(key)
 
+		data.sort(function(x, y){
+   				return d3.ascending(x.key, y.key);
+			});
 
 		//Event handling
 		plot
@@ -121,19 +124,16 @@ function LineChart(){
 				const mouse = d3.mouse(this);
 				const mouseX = mouse[0];
 				const year = scaleX.invert(mouseX);
-				console.log(year);
-				const idx = bisect(data, year, 1);
-				console.log(idx)
-				const d0 = data[idx-1];
-				const d1 = data[idx];
-				console.log(d0)
-				console.log(d1)
-				const datum = year - d0.key > d1.key - year ? d1:d0;
-				console.log(idx)
+				
+				const idx = bisect(data, year);
+				const datum = data[idx];
+			
+				const ratio = datum.value*31.6/datum.income/2.45;
+				
 				plot.select('.tool-tip')
-					.attr('transform', `translate(${scaleX(datum.key)}, ${scaleY(datum.value*31.6/datum.income/2.45)})`)
+					.attr('transform', `translate(${scaleX(datum.key)}, ${scaleY(ratio)})`)
 					.select('text')
-					.text(datum.value);
+					.text(ratio.toFixed(1));
 
 				yearChangeCallback(datum.key);
 

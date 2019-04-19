@@ -23,8 +23,9 @@ import drawHistogramPrice from './Modules/histogramPrice'
 import drawHistogramRoom from './Modules/histogramRoom';
 import drawHistogramTradetime from './Modules/histogramTradetime';
 import drawMap from './Modules/map2017';
-import drawOpening from './Modules/opening';
+//import drawOpening from './Modules/opening';
 import drawSquare from './Modules/square';
+import drawScatterplot from './Modules/construction.js'
 
 let originCode = "01";
 let currentYear = 2017;
@@ -47,6 +48,7 @@ globalDispatch.on('change:district',(code, displayName) => {
 			renderHistogramPrice(filterData);
 			renderHistogramRoom(filterData);
 			renderHistogramTradetime(filterData);
+			renderScatterplot(data)
 
 		})
 
@@ -84,11 +86,13 @@ districtPromise.then(code => renderMenu(code));
 housingDataCombined.then(data => {
 
 	const data01 = data.filter(d => d.key === "01");
-    const min_price = min(data, d => d.values[0].value)
-    const housing01 = data01.map(a=> a.values[0].value);
-      
-    drawSquare(+document.getElementById("nValue").value, housing01, min_price);
+	console.log(data01)
+    const min_price = min(data, d => d.values[5].value);
 
+    const housing01 = data01.map(a=> a.values[5].value);
+    console.log(housing01)
+    drawSquare(+document.getElementById("nValue").value, data, housing01, min_price);
+   
 })
 
 function renderLinechart(data){
@@ -137,7 +141,7 @@ function renderHistogramPrice(data){
     	});
 }
 
-function renderMap2017(data, geo) {
+function renderMap2017(data,geo) {
 	select('.map')
 		.each(function(){
 			drawMap(
@@ -147,6 +151,18 @@ function renderMap2017(data, geo) {
 			);
 		});
 }
+
+
+function renderScatterplot(data) {
+	select('.scatterplot')
+		.each(function(){
+			drawScatterplot(
+				this,
+				data
+			);
+		});
+}
+
 
 function renderHistogramTradetime(data){
 
@@ -236,30 +252,33 @@ function renderSquare(data){
       	.merge(menu);
 
     menu.selectAll("option")
-      .data(data)
-      .enter()
-      .append("option")
-      .attr("value", d => d.key)
-      .html(d=> d.name);
+		.data(data)
+		.enter()
+		.append("option")
+		.attr("value", d => d.key)
+		.html(d=> d.name);
+
 
     menu.on("change", function(){
 
-      const code = this.value;
+      	const code = this.value;
 
-      const data_code = data.filter(d => d.key === code);
+     	const data_code = data.filter(d => d.key === code);
       
-      const housing = data_code.map(a=> a.values[0].value);
-      
-      const min_price = min(data, d => d.values[0].value)
+      	const housingPrice = data_code.map(a=> a.values[5].value);
 
-      //console.log(min)
-      select("#nValue").on("input", function() {
-       drawSquare(+this.value, housing, min_price);
-      });
+      	const min_price = min(data, d => d.values[5].value)
 
-      drawSquare(+document.getElementById("nValue").value, housing, min_price);
+      	select("#nValue").on("input", function() {
+       		drawSquare(+this.value, data, housingPrice, min_price);
        
+      	});
+
+      	drawSquare(+document.getElementById("nValue").value, data, housingPrice, min_price);
+   
     })
 //console.log(housingAugmented.map(a => a.values[0].value))
 
 }
+
+

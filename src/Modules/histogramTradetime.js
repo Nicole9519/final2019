@@ -2,8 +2,8 @@ import * as d3 from 'd3';
 
 function drawHistogramTradetime(rootdom,data){
   const margin = {top: 10, right: 30, bottom: 30, left: 40},
-        width = 200 - margin.left - margin.right,
-        height = 200 - margin.top - margin.bottom;
+    width = 200 - margin.left - margin.right,
+    height = 200 - margin.top - margin.bottom;
 
 
   const parseDate = d3.timeParse("%m/%d/%y")
@@ -100,7 +100,7 @@ function drawHistogramTradetime(rootdom,data){
           "translate(" + 4*width/5 + " ," + (height/7)  + ")")
     .attr("dy","0em")            
     .text("Month")
-    .style("font-size",20);
+    .style("font-size",14);
 
 
 }

@@ -4,8 +4,8 @@ function drawHistogramRoom(rootdom, data){
 
   // set the dimensions and margins of the graph
   const margin = {top: 10, right: 30, bottom: 30, left: 40},
-      width = 200 - margin.left - margin.right,
-      height = 200 - margin.top - margin.bottom;
+    width = 200 - margin.left - margin.right,
+    height = 200 - margin.top - margin.bottom;
 
   // X axis: scale and draw:
   const x = d3.scaleLinear()
@@ -95,7 +95,7 @@ function drawHistogramRoom(rootdom, data){
           "translate(" + 4*width/5 + " ," + (height/7)  + ")")
     .attr("dy","0em")            
     .text("Room Number")
-    .style("font-size",20);
+    .style("font-size",14);
 
 }
 

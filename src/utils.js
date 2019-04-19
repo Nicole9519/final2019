@@ -8,7 +8,9 @@ function parseData(d){
 		district: d.district.padStart(2,"0"),
 		time:d.tradeTime,
 		square: d.square,
-		room:d.livingRoom
+		room:d.livingRoom,
+		renovationCondition: d.renovationCondition,
+		constructionTime: d.constructionTime
 	}
 }
 

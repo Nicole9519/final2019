@@ -71,7 +71,7 @@ const housingDataCombined = Promise.all([
 			if(income){
 				var i;
 				for (i = 0; i < d.values.length; i++) { 
-						d.values[i].income = income.filter(a => a.year === d.values[i].key);
+					d.values[i].income = income.filter(a => a.year === d.values[i].key);
 				}
 				
 			//	d.income = income

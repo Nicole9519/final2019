@@ -8,12 +8,12 @@ function drawHistogramPrice(rootdom, data){
 
   // X axis: scale and draw:
   const x = d3.scaleLinear()
-    .domain([10000, 200000])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
+    .domain([1500, 30000])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
     .range([0, width]);
 
   // set the parameters for the histogram
   const histogram = d3.histogram()
-    .value(function(d) { return d.price; })   // I need to give the vector of value
+    .value(function(d) { return d.price / 6.71; })   // I need to give the vector of value
     .domain(x.domain())  // then the domain of the graphic
     .thresholds(x.ticks(70)); // then the numbers of bins
 
@@ -25,7 +25,7 @@ function drawHistogramPrice(rootdom, data){
     .range([height, 0]);
   y.domain([0, d3.max(bins, function(d) { return d.length; })]);   // d3.hist has to be called before the Y axis obviously
   
-  const xAxis = d3.axisBottom(x).ticks(6);
+  const xAxis = d3.axisBottom(x).ticks(4);
   const yAxis = d3.axisLeft(y)
     .ticks(6)
     .tickSize(-innerWidth);
@@ -93,7 +93,7 @@ function drawHistogramPrice(rootdom, data){
           "translate(" + 4*width/5 + " ," + (height/7)  + ")")
     .attr("dy","0em")            
     .text("Price")
-    .style("font-size",20);
+    .style("font-size",14);
 
 }
 
