@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 function drawHistogramArea(rootdom, data){
   
    
-  const margin = {top: 10, right: 30, bottom: 30, left: 40};
+  const margin = {top: 10, right: 30, bottom: 40, left: 40};
   const width = 200 - margin.left - margin.right;
   const height = 200 - margin.top - margin.bottom;
 
@@ -76,6 +76,11 @@ function drawHistogramArea(rootdom, data){
     .style("fill", "#ff5a5f")
 
   rectsEnter.append('text')
+    .attr("class","xAxis")
+    .style("text-anchor", "middle")
+
+  rectsEnter.append('text')
+    .attr("class","yAxis")
     .style("text-anchor", "middle")
 
 
@@ -93,12 +98,19 @@ function drawHistogramArea(rootdom, data){
     .call(xAxis);
   plot.select(".axis-y")
     .call(yAxis);
-  plot.append("text") 
+  plot.select(".xAxis") 
     .attr("transform",
-          "translate(" + 4*width/5 + " ," + (height/7)  + ")")
+          "translate(" + width/2 + " ," + (height+40)  + ")")
     .attr("dy","0em")            
-    .text("Area")
-    .style("font-size",14);
+    .text("Floor size( ft²)")
+    .style("font-size",13);
+  plot.select(".yAxis") 
+    .attr("transform","rotate(-90)")
+    .attr("y", -30)
+    .attr('x', -height/2)
+    .attr("dy","0em")            
+    .text("Count")
+    .style("font-size",13);
 
 
 }

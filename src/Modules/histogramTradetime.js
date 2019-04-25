@@ -1,25 +1,26 @@
 import * as d3 from 'd3';
 
 function drawHistogramTradetime(rootdom,data){
-  const margin = {top: 10, right: 30, bottom: 30, left: 40},
+  const margin = {top: 10, right: 30, bottom: 40, left: 40},
     width = 200 - margin.left - margin.right,
     height = 200 - margin.top - margin.bottom;
 
 
   const parseDate = d3.timeParse("%m/%d/%y")
 
-  const formatTime = d3.timeFormat("%m");
+  //const formatTime = d3.timeFormat("%d-%m-%Y");
+
   //console.log(data)
   // X axis: scale and draw:
-  const x = d3.scaleLinear()
-    .domain([1,13])
+  const x = d3.scaleTime()
+    .domain([new Date(2017, 0, 1), new Date(2017, 11, 31)])
     //d3.scaleTime()
     //.domain([new Date(2017, 0, 1), new Date(2018, 0, 1)])
     .rangeRound([0, width]);
 
   // set the parameters for the histogram
   const histogram = d3.histogram()
-    .value(d => formatTime(parseDate(d.time)))   // I need to give the vector of value
+    .value(d => new Date(parseDate(d.time)))   // I need to give the vector of value
     .domain(x.domain())  // then the domain of the graphic
     .thresholds(x.ticks(12));// then the numbers of bins
 
@@ -32,6 +33,7 @@ function drawHistogramTradetime(rootdom,data){
   y.domain([0, d3.max(bins, function(d) { return d.length; })]);   // d3.hist has to be called before the Y axis obviously
 
   const xAxis = d3.axisBottom(x)
+    .tickFormat(function(value){ return String(value).slice(4,7)});
   const yAxis = d3.axisLeft(y)
     .ticks(4)
     .tickSize(-innerWidth);
@@ -67,7 +69,7 @@ function drawHistogramTradetime(rootdom,data){
 
   rectsEnter.append("g")
     .attr("class","axis axis-x")
-    .attr("transform", "translate(5," + height + ")")
+    .attr("transform", "translate(18," + (height+7) + ")")
 
   rectsEnter.append("g")
     .attr("class","axis axis-y")
@@ -78,6 +80,11 @@ function drawHistogramTradetime(rootdom,data){
     .style("fill", "#ff5a5f")
 
   rectsEnter.append('text')
+    .attr("class","xAxis")
+    .style("text-anchor", "middle")
+
+  rectsEnter.append('text')
+    .attr("class","yAxis")
     .style("text-anchor", "middle")
 
  //Update 
@@ -91,16 +98,27 @@ function drawHistogramTradetime(rootdom,data){
     .attr("height", function(d) { return height - y(d.length); })
   
   plot.select(".axis-x")
-    .call(xAxis);
+    .call(xAxis)
+    .selectAll('text')
+    .attr("transform", "rotate(50)")
+    .style("text-anchor", "middle");
   plot.select(".axis-y")
     .call(yAxis);
 
-  plot.append("text") 
+  plot.select(".xAxis") 
     .attr("transform",
-          "translate(" + 4*width/5 + " ," + (height/7)  + ")")
+          "translate(" + width/2 + " ," + (height+40)  + ")")
     .attr("dy","0em")            
     .text("Month")
-    .style("font-size",14);
+    .style("font-size",13);
+  plot.select(".yAxis") 
+    .attr("transform","rotate(-90)")
+    .attr("y", -30)
+    .attr('x', -height/2)
+    .attr("dy","0em")            
+    .text("Count")
+    .style("font-size",13);
+
 
 
 }

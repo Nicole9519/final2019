@@ -17,16 +17,17 @@ function LineChart(){
 		const parseTime = d3.timeParse("%Y");
 
 		const scaleX = d3.scaleLinear().domain(d3.extent(data, function(d) { return d.key; })).range([0, innerWidth]);
-		const scaleY = d3.scaleLinear().domain([0,20]).range([innerHeight, 0]);
+		const scaleY = d3.scaleLinear().domain([0,40]).range([innerHeight, 0]);
 
 		//take array of xy values, and produce a shape attribute for <path> element
+		//housing price to income ratio: median house prices to median familial disposable incomes
 		const lineGenerator = d3.line()
 			.x(d => scaleX(d.key))
-			.y(d => scaleY(d.value*31.6/d.income/2.45)); //function
+			.y(d => scaleY(d.value.price*d.value.square/d.income/2.45)); //function
 		const areaGenerator = d3.area()
 			.x(d => scaleX(d.key))
 			.y0(innerHeight)
-			.y1(d => scaleY(d.value*31.6/d.income/2.45));
+			.y1(d => scaleY(d.value.price*d.value.square/d.income/2.45));
 
 		const axisX = d3.axisBottom()
 			.scale(scaleX)
@@ -127,8 +128,8 @@ function LineChart(){
 				
 				const idx = bisect(data, year);
 				const datum = data[idx];
-			
-				const ratio = datum.value*31.6/datum.income/2.45;
+				
+				const ratio = datum.value.price*datum.value.square/datum.income/2.45;
 				
 				plot.select('.tool-tip')
 					.attr('transform', `translate(${scaleX(datum.key)}, ${scaleY(ratio)})`)

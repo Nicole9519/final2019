@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 function drawHistogramRoom(rootdom, data){
 
   // set the dimensions and margins of the graph
-  const margin = {top: 10, right: 30, bottom: 30, left: 40},
+  const margin = {top: 10, right: 30, bottom: 40, left: 40},
     width = 200 - margin.left - margin.right,
     height = 200 - margin.top - margin.bottom;
 
@@ -74,6 +74,11 @@ function drawHistogramRoom(rootdom, data){
     .style("fill", "#ff5a5f")
 
   rectsEnter.append('text')
+    .attr("class","xAxis")
+    .style("text-anchor", "middle")
+
+  rectsEnter.append('text')
+    .attr("class","yAxis")
     .style("text-anchor", "middle")
 
  //Update 
@@ -90,12 +95,19 @@ function drawHistogramRoom(rootdom, data){
     .call(xAxis);
   plot.select(".axis-y")
     .call(yAxis);
-  plot.append("text") 
+  plot.select(".xAxis") 
     .attr("transform",
-          "translate(" + 4*width/5 + " ," + (height/7)  + ")")
+          "translate(" + width/2 + " ," + (height+40)  + ")")
     .attr("dy","0em")            
-    .text("Room Number")
-    .style("font-size",14);
+    .text("Number of Bedroom")
+    .style("font-size",13);
+  plot.select(".yAxis") 
+    .attr("transform","rotate(-90)")
+    .attr("y", -30)
+    .attr('x', -height/2)
+    .attr("dy","0em")            
+    .text("Count")
+    .style("font-size",13);
 
 }
 

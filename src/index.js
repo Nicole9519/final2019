@@ -1,8 +1,8 @@
 console.log('index.js!');
 
 import {select, max, dispatch, min} from 'd3';
-import './style.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import './style.css';
 
 import {
 	dataPromise2017,
@@ -29,9 +29,10 @@ import drawScatterplot from './Modules/construction.js'
 
 let originCode = "01";
 let currentYear = 2017;
+let originMoney = 5;
 
 //Create global dispatch object
-const globalDispatch = dispatch("change:district","change:year");
+const globalDispatch = dispatch("change:district", "change:year", "change:area");
 
 globalDispatch.on('change:district',(code, displayName) => {
 	originCode = code;
@@ -43,18 +44,16 @@ globalDispatch.on('change:district',(code, displayName) => {
 	Promise.all([dataPromise2017,beijingmap])
 		.then(([data,geo]) => {
 			const filterData = data.filter(d => d.district === originCode);
-			renderMap2017(filterData,geo);
+			renderMap2017(data,geo,originCode);
 			renderHistogramArea(filterData);
 			renderHistogramPrice(filterData);
 			renderHistogramRoom(filterData);
 			renderHistogramTradetime(filterData);
-			renderScatterplot(data)
 
 		})
 
 	housingDataCombined.then(data => {
 		renderLinechart(data)
-		renderSquare(data)
 	})
 
 	// dataPromise.then(data => {
@@ -71,6 +70,15 @@ globalDispatch.on('change:year', year => {
 		renderLinechart(data);
 	})
 })
+
+globalDispatch.on('change:area', (code) =>{
+
+	
+	housingDataCombined.then(data => {
+		renderSquare(data, code)
+	})
+
+})
 	
 
 //Data import
@@ -81,18 +89,18 @@ dataPromise2017.then(() =>
 		"01",
 		"Dongcheng District"
 	));
+
 districtPromise.then(code => renderMenu(code));
+districtPromise.then(code => renderMenu2(code));
 
 housingDataCombined.then(data => {
 
-	const data01 = data.filter(d => d.key === "01");
-	console.log(data01)
-    const min_price = min(data, d => d.values[5].value);
-
-    const housing01 = data01.map(a=> a.values[5].value);
-    console.log(housing01)
-    drawSquare(+document.getElementById("nValue").value, data, housing01, min_price);
-   
+	globalDispatch.call(
+		'change:area',
+		null,
+		'01')
+	
+   //write a function here
 })
 
 function renderLinechart(data){
@@ -101,7 +109,6 @@ function renderLinechart(data){
 		// .onChangeYear(
 		// 	year => globalDispatch.call('change:year',null, year) //function, "callback function" to be executed upon the event
 		// );
-	console.log(data)
 	const charts = select('.ViewLinechart')
 		.selectAll('.chart')
 		.data(data, d => d.key);
@@ -141,10 +148,17 @@ function renderHistogramPrice(data){
     	});
 }
 
-function renderMap2017(data,geo) {
+function renderMap2017(data,geo,code) {
+
+	const map = drawMap();
+
+	if(code){
+		map.code(code)
+	}
+
 	select('.map')
 		.each(function(){
-			drawMap(
+			map(
 				this,
 				data,
 				geo
@@ -186,29 +200,29 @@ function renderHistogramRoom(data){
     	});
 }
 
-
-function renderOpening(data){
-
-
-	const charts = select('.opening')
-		.selectAll(".chart")
-		.data(data, d => d.key)
-
-	const chartsEnter = charts.enter()
-		.append("div")
-		.attr("class","chart")
-
-	charts.exit().remove();
-
-	charts.merge(chartsEnter)
-		.each(function(d){
-			drawMap(
-				this,
-				d.values);
-		});
+//the front page of the project 
+// function renderOpening(data){
 
 
-}
+// 	const charts = select('.opening')
+// 		.selectAll(".chart")
+// 		.data(data, d => d.key)
+
+// 	const chartsEnter = charts.enter()
+// 		.append("div")
+// 		.attr("class","chart")
+
+// 	charts.exit().remove();
+
+// 	charts.merge(chartsEnter)
+// 		.each(function(d){
+// 			drawMap(
+// 				this,
+// 				d.values);
+// 		});
+
+
+// }
 
 function renderMenu(code){
 	//Get list of countryCode values
@@ -240,7 +254,26 @@ function renderMenu(code){
 	});
 }
 
-function renderSquare(data){
+
+function renderSquare(data, code){
+
+	const square = drawSquare();
+
+	if(code){
+		square.code(code)
+	}
+
+	const money = +document.getElementById("nValue").value;
+
+	select('.square')
+		.each(function(){
+			square(money, data);
+		});
+}
+
+function renderMenu2(code){
+
+	const districtList = Array.from(code.entries());
 
     let menu = select(".nav2")
       	.selectAll("select")
@@ -252,33 +285,27 @@ function renderSquare(data){
       	.merge(menu);
 
     menu.selectAll("option")
-		.data(data)
+		.data(districtList)
 		.enter()
 		.append("option")
-		.attr("value", d => d.key)
-		.html(d=> d.name);
-
+		.attr("value", d => d[1].code)
+		.html(d => d[1].name);
 
     menu.on("change", function(){
 
       	const code = this.value;
 
-     	const data_code = data.filter(d => d.key === code);
-      
-      	const housingPrice = data_code.map(a=> a.values[5].value);
-
-      	const min_price = min(data, d => d.values[5].value)
-
-      	select("#nValue").on("input", function() {
-       		drawSquare(+this.value, data, housingPrice, min_price);
-       
+    	select("#nValue").on("input", function() {
+       		//drawSquare(+this.value, data, housingPrice);
+       		globalDispatch.call('change:area',null, code)
       	});
 
-      	drawSquare(+document.getElementById("nValue").value, data, housingPrice, min_price);
-   
+      //	drawSquare(+document.getElementById("nValue").value, data, housingPrice);
+   		globalDispatch.call('change:area',null, code)
     })
 //console.log(housingAugmented.map(a => a.values[0].value))
 
 }
+
 
 

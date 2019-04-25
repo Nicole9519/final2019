@@ -56,9 +56,9 @@ const housingDataCombined = Promise.all([
 		const housing_ave = nest()
 			.key(d => d.district).sortKeys(ascending)
 			.key(d => formatTime(parseDate(d.time)))
-			.rollup(values => mean(values, d => d.price))
+			.rollup(function(values){ return {'price': mean(values, d => d.price), 'square': mean(values, d=> d.square) }})
 			.entries(housing)
-		
+		//console.log(housing_ave)
 		/*用map合并数据*/
 		let housingAugmented = housing_ave.map(d => {
 			const name = districtMap.get(d.key);
