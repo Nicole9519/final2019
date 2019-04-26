@@ -13,16 +13,6 @@ const dataPromise = csv("./data/new.csv", parseData);
 const incomePromise = csv("./data/income.csv", parseIncomeData)
 const beijingmap = json('./data/beijing.geojson')
 
-// const districtPromise = csv("district.csv",parseDistrict).then(district => {
-// 	const district_tem = district.map(a =>{
-// 		return [a.code,a.name]
-// 	});
-	
-// 	const districtMap = new Map(district_tem);
-
-// 	return districtMap
-
-// });
 
 
 //housing combined with income 
@@ -36,7 +26,7 @@ const housingDataCombined = Promise.all([
 		const district_tem = district.map(a =>{
 			return [a.code,a.name]
 		});
-		//create new map, return?
+
 		const districtMap = new Map(district_tem);
 
 		const parseDate = timeParse("%m/%d/%y")
@@ -51,14 +41,13 @@ const housingDataCombined = Promise.all([
 			return [a.key,a.values]
 		})
 		const incomeMap = new Map(income_tem2)
-		//console.log(incomeMap);
-		//console.log(districtMap)
+	
 		const housing_ave = nest()
 			.key(d => d.district).sortKeys(ascending)
 			.key(d => formatTime(parseDate(d.time)))
 			.rollup(function(values){ return {'price': mean(values, d => d.price), 'square': mean(values, d=> d.square) }})
 			.entries(housing)
-		//console.log(housing_ave)
+		
 		/*用map合并数据*/
 		let housingAugmented = housing_ave.map(d => {
 			const name = districtMap.get(d.key);

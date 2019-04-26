@@ -38,14 +38,14 @@ function groupByYear(data){
 	const formatTime = timeFormat("%Y");
     
 	let data_filter = nest()
-			.key(d => formatTime(parseDate(d.tradeTime)))
-			.entries(data)
+		.key(d => formatTime(parseDate(d.tradeTime)))
+		.entries(data)
 
 	data_filter.filter(d => d.key === "2012" || d.key === "2013" || d.key === "2014" || d.key === "2015" || d.key === "2016" || d.key === "2017");
 	
 	const data_sort = data.sort(function(x, y){
-   				return ascending(x.key, y.key);
-			});
+   		return ascending(x.key, y.key);
+	});
 
 	return data_sort
 }
@@ -54,8 +54,8 @@ function groupByYear(data){
 function groupByDistrict(d){
 	
 	const housing_tem = nest()
-			.key(d => d.district)
-			.entries(data);
+		.key(d => d.district)
+		.entries(data);
 
 	return housing_tem;
 }

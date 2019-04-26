@@ -8,26 +8,19 @@ function drawHistogramTradetime(rootdom,data){
 
   const parseDate = d3.timeParse("%m/%d/%y")
 
-  //const formatTime = d3.timeFormat("%d-%m-%Y");
-
-  //console.log(data)
-  // X axis: scale and draw:
   const x = d3.scaleTime()
     .domain([new Date(2017, 0, 1), new Date(2017, 11, 31)])
-    //d3.scaleTime()
-    //.domain([new Date(2017, 0, 1), new Date(2018, 0, 1)])
     .rangeRound([0, width]);
 
   // set the parameters for the histogram
   const histogram = d3.histogram()
-    .value(d => new Date(parseDate(d.time)))   // I need to give the vector of value
-    .domain(x.domain())  // then the domain of the graphic
-    .thresholds(x.ticks(12));// then the numbers of bins
+    .value(d => new Date(parseDate(d.time)))   
+    .domain(x.domain())  
+    .thresholds(x.ticks(12));
 
   // And apply this function to data to get the bins
   const bins = histogram(data);
-  //console.log(bins)
-  // Y axis: scale and draw:
+
   const y = d3.scaleLinear()
     .range([height, 0]);
   y.domain([0, d3.max(bins, function(d) { return d.length; })]);   // d3.hist has to be called before the Y axis obviously
@@ -87,7 +80,7 @@ function drawHistogramTradetime(rootdom,data){
     .attr("class","yAxis")
     .style("text-anchor", "middle")
 
- //Update 
+  //Update 
   plot.selectAll('.rect')
     .data(bins)
     .transition()

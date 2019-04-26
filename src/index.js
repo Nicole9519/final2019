@@ -25,11 +25,11 @@ import drawHistogramTradetime from './Modules/histogramTradetime';
 import drawMap from './Modules/map2017';
 //import drawOpening from './Modules/opening';
 import drawSquare from './Modules/square';
-import drawScatterplot from './Modules/construction.js'
+// import drawScatterplot from './Modules/construction.js'
 
 let originCode = "01";
 let currentYear = 2017;
-let originMoney = 5;
+
 
 //Create global dispatch object
 const globalDispatch = dispatch("change:district", "change:year", "change:area");
@@ -61,7 +61,7 @@ globalDispatch.on('change:district',(code, displayName) => {
 	// })
 })
 
-	
+/*	
 globalDispatch.on('change:year', year => {
 	currentYear = +year;
 
@@ -70,7 +70,7 @@ globalDispatch.on('change:year', year => {
 		renderLinechart(data);
 	})
 })
-
+*/
 globalDispatch.on('change:area', (code) =>{
 
 	
@@ -281,7 +281,7 @@ function renderMenu2(code){
 
     menu = menu.enter()
     	.append('select')
-      	.attr('class','form-control form-control-sm')
+      	.attr('class','form-control form-control-sm menu2')
       	.merge(menu);
 
     menu.selectAll("option")

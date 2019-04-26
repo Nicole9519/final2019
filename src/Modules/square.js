@@ -24,7 +24,7 @@ function drawSquare(){
  
     //min
     const min = d3.min(data, d => d.values[5].value.price);
-
+console.log(data)
     //Build DOM structure
     const svg = d3.select(".square")
       .classed('line-chart',true)
@@ -176,7 +176,8 @@ function drawSquare(){
       .attr("x", 300)
       .attr("y", 40)
       .text('You could buy a ' + area.toFixed(1) + "ft² house.")
-   
+      .style('font-family',"Metric-Regular")
+
     plot.select(".nearText")
       .style("opacity", 0)
       .transition()
@@ -186,6 +187,7 @@ function drawSquare(){
       .attr("x", 300)
       .attr("y", 80)
       .text("You could also spend the same amount of money to buy ")
+      .style('font-family',"Metric-Regular")
 
     plot.select(".nearText2")
       .style("opacity", 0)
@@ -196,6 +198,7 @@ function drawSquare(){
       .attr("x", 300)
       .attr("y", 120)
       .text("a similar size house ("+ nearestArea.toFixed(1) + "ft²) in " + nearName )
+      .style('font-family',"Metric-Regular")
 
     plot.select(".fixText1")
       .style("opacity", 0)
@@ -206,6 +209,7 @@ function drawSquare(){
       .attr("x", 300)
       .attr("y", 160 )
       .text("With that amount of money, you could buy ")
+      .style('font-family',"Metric-Regular")
 
   //append('p') <br />
     plot.select(".fixText2")
@@ -217,7 +221,7 @@ function drawSquare(){
       .attr("x", 300)
       .attr("y", 200 )
       .text('the biggest one in Fangshan District: ' + maxArea.toFixed(1) + "ft².")
-
+      .style('font-family',"Metric-Regular")
   }
 
   exportFunction.code = function(_){

@@ -9,14 +9,14 @@ function drawHistogramRoom(rootdom, data){
 
   // X axis: scale and draw:
   const x = d3.scaleLinear()
-    .domain([1, 10])     // can use this instead of 1000 to have the max of data: d3.max(data, function(d) { return +d.price })
+    .domain([1, 10])    
     .range([0, width]);
  
   // set the parameters for the histogram
   const histogram = d3.histogram()
-    .value(function(d) { return d.room; })   // I need to give the vector of value
-    .domain(x.domain())  // then the domain of the graphic
-    .thresholds(x.ticks(10)); // then the numbers of bins
+    .value(function(d) { return d.room; })   
+    .domain(x.domain())  
+    .thresholds(x.ticks(10));
 
   // And apply this function to data to get the bins
   const bins = histogram(data);

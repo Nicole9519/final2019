@@ -59,11 +59,28 @@ html,body,div{
   display: inline-block;
 }
 
+.input{
+  width: 100px;
+}
+
+.menuText{
+  display: inline;
+}
 
 .form-inline .nav{
   display: inline;
 }
 
+
+.nav2{
+  width:180px;
+  display: inline;
+  position: relative;
+}
+
+.menu2{
+   width:180px;
+}
 
 
 img{
@@ -73,16 +90,13 @@ img{
 }
 
 .explain{
-  width: 27%;
-  height: 27%;
-  position: relative;
-  left: -65px;
-  top: 150px
+  text-align:left;
+  width: 20%;
+  height: 18%;
+  margin-left: -180px;
+  margin-top: 50px;
+  position: absolute;
 }
-/*
-div .container{
-  background-color: #f2f2f2;
-}*/
 
 /* For devices larger than 550px */
 @media (min-width: 550px) {
@@ -239,3 +253,5 @@ p {
   font-size: 16px;
   color: #6a6a6a
 }
+
+
